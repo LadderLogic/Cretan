@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Cretan.Views"
+             x:Class="Cretan.Views.PaceDefinition">
+    
+
+    <ContentPage.Resources>
+        <local:DoubleConverter x:Key="dblConverter" x:Name="dblConverter"/>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Spacing="20" Padding="15">
+                <Label Text="Target Pace (mph)" FontSize="Medium" />
+                <Entry Text="{Binding Session.TargetPaceInMph, Converter={StaticResource dblConverter}}" Keyboard="Numeric" FontSize="Small" />
+                <Label Text="Tolerance (%)" FontSize="Medium" />
+                <Entry Text="{Binding Session.TolerancePercent,Converter={StaticResource dblConverter}}" Keyboard="Numeric" FontSize="Small" />
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Haptic Feedback" FontSize="Medium" />
+                    <Switch IsToggled="{Binding HapticFeedback}" />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Audio Feedback" FontSize="Medium" />
+                    <Switch IsToggled="{Binding AudioFeedback}" />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Media Volume Feedback" FontSize="Medium" />
+                    <Switch IsToggled="{Binding MediaVolumeFeedback}" />
+                </StackLayout>
+                <Button Command="{Binding Start}" Text="Start"/>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
