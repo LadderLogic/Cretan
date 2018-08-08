@@ -23,6 +23,13 @@ namespace Cretan.Droid
             Xamarin.Essentials.Platform.Init(this, bundle);
             LoadApplication(new Cretan.App());
         }
+
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
+        {
+            Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 }
 

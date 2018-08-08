@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Cretan.Contracts\Cretan.Contracts.csproj" />
+    <ProjectReference Include="..\..\Cretan.DeviceControl\Cretan.DeviceControl.csproj" />
   </ItemGroup>
 
   <ItemGroup>

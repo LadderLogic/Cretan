@@ -11,6 +11,8 @@
     <ContentPage.Content>
         <ScrollView>
             <StackLayout Spacing="20" Padding="15">
+                <Label Text="Current Location" FontSize="Medium" />
+                <Label Text="{Binding CurrentLocation.Longitude}" FontSize="Medium" />
                 <Label Text="Target Pace (mph)" FontSize="Medium" />
                 <Entry Text="{Binding Session.TargetPaceInMph, Converter={StaticResource dblConverter}}" Keyboard="Numeric" FontSize="Small" />
                 <Label Text="Tolerance (%)" FontSize="Medium" />

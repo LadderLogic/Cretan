@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cretan.Contracts;
+using Cretan.DeviceControl;
 using Prism.Commands;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Cretan.ViewModels
@@ -19,11 +21,15 @@ namespace Cretan.ViewModels
             Debug.WriteLine("ctor viewmodel");
             Session = new SessionSetting() { TargetPaceInMph = 5, TolerancePercent = 10 };
             Start = new DelegateCommand(StartSession);
+            _geo = new Geo();
         }
 
         private void StartSession()
         {
-            MessagingCenter.Send(this, Messages.StartSession, Session);
+            //MessagingCenter.Send(this, Messages.StartSession, Session);
+            _geo.StartTrackingLocation();
+            _geo.CurrentLocation.Subscribe((newLocation) => CurrentLocation = newLocation);
+            
         }
 
 
@@ -34,8 +40,16 @@ namespace Cretan.ViewModels
             set { SetProperty(ref _session, value); }
         }
         #endregion Session
+        public Location CurrentLocation
+        {
+            get { return _currentLocation; }
+            set { SetProperty(ref _currentLocation, value); }
+        }
+        
 
         public DelegateCommand Start { get; set; }
+
+        private Geo _geo;
 
 
         #region HapticFeedback		
@@ -73,6 +87,8 @@ namespace Cretan.ViewModels
 
         #region MediaVolumeFeedback		
         private bool _mediaVolumeFeedback;
+        private Location _currentLocation;
+
         public bool MediaVolumeFeedback
         {
             get { return _mediaVolumeFeedback; }
