@@ -21,17 +21,18 @@ namespace Cretan.ViewModels
             Debug.WriteLine("ctor viewmodel");
             Session = new SessionSetting() { TargetPaceInMph = 5, TolerancePercent = 10 };
             Start = new DelegateCommand(StartSession);
-            _geo = new Geo();
         }
 
         private void StartSession()
         {
-            //MessagingCenter.Send(this, Messages.StartSession, Session);
-            _geo.StartTrackingLocation();
-            _geo.CurrentLocation.Subscribe((newLocation) => CurrentLocation = newLocation);
+            MessagingCenter.Send(this, Messages.StartSession, Session);
+           
             
         }
 
+
+
+        
 
         #region Session		
         public SessionSetting Session
@@ -49,7 +50,6 @@ namespace Cretan.ViewModels
 
         public DelegateCommand Start { get; set; }
 
-        private Geo _geo;
 
 
         #region HapticFeedback		

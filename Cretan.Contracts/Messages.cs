@@ -7,5 +7,7 @@ namespace Cretan.Contracts
     public static class Messages
     {
         public static string StartSession { get; } = "StartSession";
+
+        public static string StopSession { get; } = "StopSession";
     }
 }

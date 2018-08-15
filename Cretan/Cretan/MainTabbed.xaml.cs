@@ -35,7 +35,7 @@ namespace Cretan
                 default:
                     definitionPage = new PaceDefinition()
                     {
-                        Title = "Session"
+                        Title = "Pace Settings"
                     };
 
                     //aboutPage = new AboutPage()
@@ -54,10 +54,15 @@ namespace Cretan
             {
                 var sessionSetting = item;
 
-                await Navigation.PushAsync(new Session(sessionSetting));
+                await Navigation.PushAsync(new GoPage(sessionSetting));
             });
 
+            MessagingCenter.Subscribe<GoViewModel, SessionProgress>(this, Messages.StopSession, async (obj, item) =>
+            {
+                var sessionProgress = item;
 
+                await Navigation.PopToRootAsync();
+            });
 
         }
 

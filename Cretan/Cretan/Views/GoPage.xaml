@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Cretan.Views.GoPage">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Spacing="20" Padding="15">
+                <StackLayout Orientation="Vertical" HorizontalOptions="CenterAndExpand">
+                    <Label Text="Pace" FontSize="Medium" />
+                    <Button BorderRadius="20" MinimumHeightRequest="40" MinimumWidthRequest="40" BackgroundColor="Turquoise" 
+                            Text="{Binding CurrentPace}"
+                            FontSize="Large" TextColor="Black"
+                           Command="{Binding Stop}" />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                    <Label Text="Target" FontSize="Medium" />
+                    <Label Text="{Binding TargetPace}"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                    <Label Text="Time Left" FontSize="Medium" />
+                    <Label Text="{Binding TimeLeft}"/>
+                    <ProgressBar Progress="{Binding ProgressLeft}" />
+                </StackLayout>
+
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
