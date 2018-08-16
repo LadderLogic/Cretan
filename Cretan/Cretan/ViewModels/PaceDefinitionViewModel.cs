@@ -19,7 +19,9 @@ namespace Cretan.ViewModels
         public PaceDefinitionViewModel()
         {
             Debug.WriteLine("ctor viewmodel");
-            Session = new SessionSetting() { TargetPaceInMph = 5, TolerancePercent = 10 };
+            Session = new SessionSetting() { TargetPaceInMph = 5, TolerancePercent = 10};
+            Duration = 15; //. default to 15 minutes
+            HapticFeedback = true;
             Start = new DelegateCommand(StartSession);
         }
 
@@ -30,9 +32,20 @@ namespace Cretan.ViewModels
             
         }
 
+        private double _duration;
+        /// <summary>
+        /// Duration in minutes
+        /// </summary>
+        public double Duration
+        {
+            get { return _duration; }
+            set {
+                SetProperty(ref _duration, value);
+                Session.Duration = TimeSpan.FromMinutes(value);
+            }
+        }
 
 
-        
 
         #region Session		
         public SessionSetting Session

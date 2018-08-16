@@ -38,5 +38,11 @@ namespace Cretan.Contracts
         /// </value>
         public TimeSpan WarmUpTime { get; set; }
 
+
+        /// <summary>
+        /// Duration
+        /// </summary>
+        public TimeSpan Duration { get; set; } 
+
     }
 }

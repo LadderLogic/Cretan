@@ -11,12 +11,12 @@
     <ContentPage.Content>
         <ScrollView>
             <StackLayout Spacing="20" Padding="15">
-                <Label Text="Current Location" FontSize="Medium" />
-                <Label Text="{Binding DebugString}" FontSize="Small" />
                 <Label Text="Target Pace (mph)" FontSize="Medium" />
-                <Entry Text="{Binding Session.TargetPaceInMph, Converter={StaticResource dblConverter}}" Keyboard="Numeric" FontSize="Small" />
+                <Entry Text="{Binding Session.TargetPaceInMph, Converter={StaticResource dblConverter}}" Keyboard="Numeric" FontSize="Medium" />
+                <Label Text="Session Duration (minutes)" FontSize="Medium" />
+                <Entry Text="{Binding Duration, Converter={StaticResource dblConverter}}" Keyboard="Numeric" FontSize="Medium"/>
                 <Label Text="Tolerance (%)" FontSize="Medium" />
-                <Entry Text="{Binding Session.TolerancePercent,Converter={StaticResource dblConverter}}" Keyboard="Numeric" FontSize="Small" />
+                <Entry Text="{Binding Session.TolerancePercent,Converter={StaticResource dblConverter}}" Keyboard="Numeric" FontSize="Medium" />
                 <StackLayout Orientation="Horizontal">
                     <Label Text="Haptic Feedback" FontSize="Medium" />
                     <Switch IsToggled="{Binding HapticFeedback}" />

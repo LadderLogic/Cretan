@@ -32,6 +32,7 @@ namespace Cretan.DeviceControl
         }
 
         private ManualResetEventSlim _waitForMotion;
+        private CancellationTokenSource mTrackingToken;
 
         public Geo()
         {
@@ -43,23 +44,27 @@ namespace Cretan.DeviceControl
 
         private void Accelerometer_ReadingChanged1(object sender, AccelerometerChangedEventArgs e)
         {
-            if (e.Reading.Acceleration.X > 1)
+            if ((e.Reading.Acceleration.X > 1) || (e.Reading.Acceleration.Y > 1) || (e.Reading.Acceleration.Z > 1))
                 _waitForMotion.Set();
         }
 
 
         public void StartTrackingLocation()
         {
+
+            mTrackingToken = new CancellationTokenSource();
             // Start the accelerometer to sense motion before start calculating speed using GPS
             Accelerometer.Start(SensorSpeed.UI);
 
             Task.Factory.StartNew(() =>
             {
+                _currentLocation.OnNext(Geolocation.GetLastKnownLocationAsync().Result);
+
                 while (true)
                 {
-                    Task.Delay(3000);
+                    Task.Delay(3000, mTrackingToken.Token).Wait();
                     // If we're not moving set speed to zero and wait for motion before we start measuring speed again
-                    while(!_waitForMotion.Wait(3000))
+                    while(!_waitForMotion.Wait(3000, mTrackingToken.Token))
                     {
                         _speedMph.OnNext(0);
                     }
@@ -69,17 +74,26 @@ namespace Cretan.DeviceControl
                     var newLocation = Geolocation.GetLocationAsync(new GeolocationRequest(GeolocationAccuracy.Best)).Result;
                     if (newLocation.Accuracy.Value > 20)
                         continue;
-                    _currentLocation.OnNext(newLocation);
-                    UpdateSpeed(oldLocation, _currentLocation.Value);
+                    UpdateLocationAndSpeed(oldLocation, newLocation);
                     _waitForMotion.Reset();
                 }
-            });
+            }, mTrackingToken.Token);
         }
 
-        private void UpdateSpeed(Location oldLocation, Location value)
+        public void StopTrackingLocation()
         {
+            Accelerometer.Stop();
+            _waitForMotion.Set();
+            mTrackingToken.Cancel();
+        }
+
+        private void UpdateLocationAndSpeed(Location oldLocation, Location value)
+        {
+            _currentLocation.OnNext(value);
             var distance = oldLocation.CalculateDistance(value, DistanceUnits.Miles);
             var speedMph = Math.Abs(distance) / (value.TimestampUtc - oldLocation.TimestampUtc).TotalHours;
+            if (speedMph < 0)
+                return;
             _speedMph.OnNext(speedMph);
         }
     }
