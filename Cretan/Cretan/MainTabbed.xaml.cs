@@ -53,8 +53,8 @@ namespace Cretan
             MessagingCenter.Subscribe<PaceDefinitionViewModel, SessionSetting>(this, Messages.StartSession, async (obj, item) =>
             {
                 var sessionSetting = item;
-
-                await Navigation.PushAsync(new GoPage(sessionSetting));
+                var goPage = new GoPage(sessionSetting);
+                await Navigation.PushAsync(goPage);
             });
 
             MessagingCenter.Subscribe<GoViewModel, SessionProgress>(this, Messages.StopSession, async (obj, item) =>

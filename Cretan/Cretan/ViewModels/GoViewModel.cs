@@ -14,7 +14,7 @@ namespace Cretan.ViewModels
     public class GoViewModel : BaseViewModel
     {
         private Geo _geo;
-        private Stopwatch mSessionWatch;
+        private Stopwatch _sessionWatch;
 
         public GoViewModel(SessionSetting sessionSetting)
         {
@@ -22,7 +22,7 @@ namespace Cretan.ViewModels
             TargetPace = sessionSetting.TargetPaceInMph;
             _geo = new Geo();
             _haptic = new Haptic();
-            mSessionWatch = new Stopwatch();
+            _sessionWatch = new Stopwatch();
             Stop = new DelegateCommand(StopSession);
             StartSession();
         }
@@ -31,27 +31,29 @@ namespace Cretan.ViewModels
 
         private void StartSession()
         {
-            mSessionWatch.Start();
+            _sessionWatch.Start();
             _geo.StartTrackingLocation();
             _geo.SpeedMph.Subscribe((newSpeed) => UpdateSpeedWithCurrentUnits(newSpeed));
             mSessionMonitorToken = new CancellationTokenSource();
             Task.Factory.StartNew(MonitorSession, mSessionMonitorToken.Token);
         }
 
+        private int _paceTrackingInSeconds = 30;
+
         private void MonitorSession()
         {
             var paceWatch = new Stopwatch();
             while(!mSessionMonitorToken.IsCancellationRequested)
             {
-                TimeLeft = mCurrentSessionSettings.Duration - mSessionWatch.Elapsed;
-                ProgressLeft = mSessionWatch.Elapsed.TotalSeconds / mCurrentSessionSettings.Duration.TotalSeconds;
+                TimeLeft = mCurrentSessionSettings.Duration - _sessionWatch.Elapsed;
+                ProgressLeft = _sessionWatch.Elapsed.TotalSeconds / mCurrentSessionSettings.Duration.TotalSeconds;
                 Task.Delay(1000).Wait();
 
                 if (!IsOnPace())
                 {
                     if (paceWatch.IsRunning)
                     {
-                        if (paceWatch.Elapsed.TotalSeconds >= 15)
+                        if (paceWatch.Elapsed.TotalSeconds >= _paceTrackingInSeconds)
                         {
                             NotifyOffPace();
                             paceWatch.Restart();
@@ -81,6 +83,8 @@ namespace Cretan.ViewModels
 
         private void NotifyOffPace()
         {
+            if (IsOnPace())
+                return;
             if (CurrentPace < TargetPace)
                 NotifyLowPace();
             else
@@ -91,7 +95,7 @@ namespace Cretan.ViewModels
         {
             if (mCurrentSessionSettings.Alerts.HasFlag(AlertType.Haptic))
             {
-                _haptic.Pulse(500, 100, TimeSpan.FromSeconds(3), mSessionMonitorToken.Token);
+                _haptic.Pulse(750, 750, TimeSpan.FromSeconds(3), mSessionMonitorToken.Token);
             }
         }
 
@@ -99,7 +103,7 @@ namespace Cretan.ViewModels
         {
             if (mCurrentSessionSettings.Alerts.HasFlag(AlertType.Haptic))
             {
-                _haptic.Pulse(200, 200, TimeSpan.FromSeconds(2), mSessionMonitorToken.Token);
+                _haptic.Pulse(250, 250, TimeSpan.FromSeconds(2), mSessionMonitorToken.Token);
             }
 
         }
