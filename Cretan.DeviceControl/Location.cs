@@ -83,19 +83,20 @@ namespace Cretan.DeviceControl
         {
             Accelerometer.Stop();
             _waitForMotion.Set();
-            _trackingToken.Cancel();
+            if (!(_trackingToken?.IsCancellationRequested ?? true))
+                _trackingToken.Cancel();
         }
 
         private void UpdateLocationAndSpeed(Location oldLocation, Location value)
         {
             _currentLocation.OnNext(value);
-            //var distance = oldLocation.CalculateDistance(value, DistanceUnits.Miles);
-            //var speedMph = Math.Abs(distance) / (value.TimestampUtc - oldLocation.TimestampUtc).TotalHours;
-            // Xam essentials 0.10 with speed now
-            var speedMph = value.Speed;
-            if (!speedMph.HasValue || speedMph.Value <= 0)
+           
+            var speedMps = value.Speed;
+            if (!speedMps.HasValue || speedMps.Value <= 0)
                 return;
-            _speedMph.OnNext(speedMph.Value);
+            _speedMph.OnNext(Converters.MeterPerSecondToMilesPerHour(speedMps.Value));
         }
+
+
     }
 }

@@ -1,5 +1,4 @@
-﻿using Cretan.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,13 +10,11 @@ using Xamarin.Forms.Xaml;
 namespace Cretan.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PaceDefinition : ContentPage
+	public partial class MainMenu : ContentPage
 	{
-		public PaceDefinition ()
+		public MainMenu ()
 		{
 			InitializeComponent ();
-            BindingContext = new PaceDefinitionViewModel();
-
-        }
-    }
+		}
+	}
 }

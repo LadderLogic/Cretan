@@ -1,3 +1,8 @@
+using Cretan.Services;
+using Cretan.Views;
+using Prism;
+using Prism.Ioc;
+using Prism.Navigation;
 using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -5,28 +10,29 @@ using Xamarin.Forms.Xaml;
 [assembly: XamlCompilation (XamlCompilationOptions.Compile)]
 namespace Cretan
 {
-	public partial class App : Application
-	{
-		public App ()
-		{
-			InitializeComponent();
+	public partial class App : Prism.DryIoc.PrismApplication
+    {
+        public App() : this(null) { }
 
-            MainPage = new NavigationPage(new MainTabbed());
+        public App(IPlatformInitializer initializer) : base(initializer) { }
+
+        protected override async void OnInitialized()
+        {
+            InitializeComponent();
+
+            await NavigationService.NavigateAsync("NavigationPage/MainMenu");
         }
 
-		protected override void OnStart ()
-		{
-			// Handle when your app starts
-		}
+        protected override void RegisterTypes(IContainerRegistry containerRegistry)
+        {
+            containerRegistry.RegisterForNavigation<NavigationPage>();
+            containerRegistry.RegisterForNavigation<MainMenu>();
+            containerRegistry.RegisterForNavigation<FreeRunSetup>();
+            containerRegistry.RegisterForNavigation<GoPage>();
+            containerRegistry.RegisterForNavigation<CretanPath>();
 
-		protected override void OnSleep ()
-		{
-			// Handle when your app sleeps
-		}
-
-		protected override void OnResume ()
-		{
-			// Handle when your app resumes
-		}
-	}
+            // register services. move them to different module?
+            containerRegistry.RegisterSingleton<IPaceKeeper, PaceKeeper>();
+        }
+    }
 }

@@ -1,35 +1,34 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:Cretan.Views"
-             x:Class="Cretan.Views.PaceDefinition">
-    
-
-    <ContentPage.Resources>
-        <local:DoubleConverter x:Key="dblConverter" x:Name="dblConverter"/>
-    </ContentPage.Resources>
+              xmlns:local="clr-namespace:Cretan.Views"
+             x:Class="Cretan.Views.FreeRunSetup">
+        <ContentPage.Resources>
+            <local:DoubleConverter x:Key="dblConverter" x:Name="dblConverter"/>
+        </ContentPage.Resources>
     <ContentPage.Content>
         <ScrollView>
-            <StackLayout Spacing="20" Padding="15">
-                <Label Text="Target Pace (mph)" FontSize="Medium" />
+            <StackLayout Spacing="10" Padding="10">
+                <Label Text="Target Pace (mph)" Font="16"  />
                 <Entry Text="{Binding Session.TargetPaceInMph, Converter={StaticResource dblConverter}}" Keyboard="Numeric" FontSize="Medium" />
-                <Label Text="Session Duration (minutes)" FontSize="Medium" />
+                <Label Text="Session Duration (minutes)" Font="16"  />
                 <Entry Text="{Binding Duration, Converter={StaticResource dblConverter}}" Keyboard="Numeric" FontSize="Medium"/>
-                <Label Text="Tolerance (%)" FontSize="Medium" />
+                <Button Command="{Binding Start}" Font="Bold, 24" Text="Start"/>
+
+                <Label Text="Tolerance (%)" Font="16"  Margin="0,20,0,0" />
                 <Entry Text="{Binding Session.TolerancePercent,Converter={StaticResource dblConverter}}" Keyboard="Numeric" FontSize="Medium" />
                 <StackLayout Orientation="Horizontal">
-                    <Label Text="Haptic Feedback" FontSize="Medium" />
+                    <Label Text="Haptic Feedback" Font="16" VerticalTextAlignment="Center"/>
                     <Switch IsToggled="{Binding HapticFeedback}" />
                 </StackLayout>
                 <StackLayout Orientation="Horizontal">
-                    <Label Text="Audio Feedback" FontSize="Medium" />
+                    <Label Text="Audio Feedback" Font="16" VerticalTextAlignment="Center"/>
                     <Switch IsToggled="{Binding AudioFeedback}" />
                 </StackLayout>
                 <StackLayout Orientation="Horizontal">
-                    <Label Text="Media Volume Feedback" FontSize="Medium" />
+                    <Label Text="Media Volume Feedback" Font="16" VerticalTextAlignment="Center" />
                     <Switch IsToggled="{Binding MediaVolumeFeedback}" />
                 </StackLayout>
-                <Button Command="{Binding Start}" Text="Start"/>
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

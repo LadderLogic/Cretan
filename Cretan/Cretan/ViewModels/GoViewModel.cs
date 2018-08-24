@@ -1,6 +1,8 @@
 ﻿using Cretan.Contracts;
 using Cretan.DeviceControl;
+using Cretan.Services;
 using Prism.Commands;
+using Prism.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,133 +13,58 @@ using Xamarin.Forms;
 
 namespace Cretan.ViewModels
 {
-    public class GoViewModel : BaseViewModel
+    public class GoPageViewModel : BaseViewModel
     {
-        private Geo _geo;
-        private Stopwatch _sessionWatch;
 
-        public GoViewModel(SessionSetting sessionSetting)
+
+        public GoPageViewModel(IPaceKeeper paceKeeper)
         {
-            mCurrentSessionSettings = sessionSetting;
-            TargetPace = sessionSetting.TargetPaceInMph;
-            _geo = new Geo();
-            _haptic = new Haptic();
-            _sessionWatch = new Stopwatch();
+          
             Stop = new DelegateCommand(StopSession);
-            StartSession();
-        }
 
+            _paceKeeper = paceKeeper;
 
+           
 
-        private void StartSession()
-        {
-            _sessionWatch.Start();
-            _geo.StartTrackingLocation();
-            _geo.SpeedMph.Subscribe((newSpeed) => UpdateSpeedWithCurrentUnits(newSpeed));
-            mSessionMonitorToken = new CancellationTokenSource();
-            Task.Factory.StartNew(MonitorSession, mSessionMonitorToken.Token);
-        }
-
-        private int _paceTrackingInSeconds = 30;
-
-        private void MonitorSession()
-        {
-            var paceWatch = new Stopwatch();
-            while(!mSessionMonitorToken.IsCancellationRequested)
-            {
-                TimeLeft = mCurrentSessionSettings.Duration - _sessionWatch.Elapsed;
-                ProgressLeft = _sessionWatch.Elapsed.TotalSeconds / mCurrentSessionSettings.Duration.TotalSeconds;
-                Task.Delay(1000).Wait();
-
-                if (!IsOnPace())
-                {
-                    if (paceWatch.IsRunning)
-                    {
-                        if (paceWatch.Elapsed.TotalSeconds >= _paceTrackingInSeconds)
-                        {
-                            NotifyOffPace();
-                            paceWatch.Restart();
-                        }
-                    }
-                    else
-                    {
-                        paceWatch.Start();
-                    }
-                }
-                else
-                {
-                    if (paceWatch.IsRunning)
-                    {
-                        paceWatch.Stop();
-                        ResetPaceNotification();
-                    }
-                }
-                
-            }
-        }
-
-        private void ResetPaceNotification()
-        {
             
+
         }
 
-        private void NotifyOffPace()
+        public override void OnNavigatingTo(NavigationParameters parameters)
         {
-            if (IsOnPace())
-                return;
-            if (CurrentPace < TargetPace)
-                NotifyLowPace();
-            else
-                NotifyHighPace();
-        }
+            base.OnNavigatingTo(parameters);
 
-        private void NotifyHighPace()
-        {
-            if (mCurrentSessionSettings.Alerts.HasFlag(AlertType.Haptic))
+            // Read session settings passed in by navigation
+            _currentSessionSettings = parameters.GetValue<SessionSetting>(nameof(SessionSetting));
+
+            TargetPace = _currentSessionSettings.TargetPaceInMph;
+
+
+            _paceKeeper.StartSession(_currentSessionSettings);
+
+            _paceKeeper.CurrentPace.Subscribe(pace => CurrentPace = pace);
+            _paceKeeper.TimeLeft.Subscribe(timeLeft =>
             {
-                _haptic.Pulse(750, 750, TimeSpan.FromSeconds(3), mSessionMonitorToken.Token);
-            }
+                TimeLeft = timeLeft;
+                ProgressLeft = (_currentSessionSettings.Duration.TotalSeconds - timeLeft.TotalSeconds) / _currentSessionSettings.Duration.TotalSeconds;
+            });
         }
 
-        private void NotifyLowPace()
-        {
-            if (mCurrentSessionSettings.Alerts.HasFlag(AlertType.Haptic))
-            {
-                _haptic.Pulse(250, 250, TimeSpan.FromSeconds(2), mSessionMonitorToken.Token);
-            }
 
-        }
 
-        private bool IsOnPace()
-        {
-            return (Math.Abs(CurrentPace - TargetPace) < (TargetPace * mCurrentSessionSettings.TolerancePercent / 100));
-        }
 
         private void StopSession()
         {
-            _geo.StopTrackingLocation();
-            mSessionMonitorToken.Cancel();
-            MessagingCenter.Send(this, Messages.StopSession, _progress);
+            _paceKeeper.StopCurrentSession();
         }
 
         private SessionProgress _progress = new SessionProgress();
 
-        private void UpdateSpeedWithCurrentUnits(double newSpeedInMph)
-        {
-            
-            CurrentSpeed = newSpeedInMph;
-            // TODO: Need unit converter based on settings
-            CurrentPace = newSpeedInMph;
 
-            
-
-            // Debug
-            var loc = _geo.GetCurrentLocation();
-            DebugString = $"S {newSpeedInMph} A {loc.Accuracy} L {loc.Latitude} Lo {loc.Longitude}";
-        }
 
         public DelegateCommand Stop { get; set; }
 
+        private IPaceKeeper _paceKeeper;
         private double _currentPace;
 
         public double CurrentPace
@@ -147,7 +74,7 @@ namespace Cretan.ViewModels
         }
 
         private double _targetPace;
-        private SessionSetting mCurrentSessionSettings;
+        private SessionSetting _currentSessionSettings;
 
         public double TargetPace
         {
@@ -172,8 +99,7 @@ namespace Cretan.ViewModels
 
 
         private TimeSpan _timeLeft;
-        private CancellationTokenSource mSessionMonitorToken;
-        private Haptic _haptic;
+
 
         public TimeSpan TimeLeft
         {

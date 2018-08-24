@@ -1,6 +1,7 @@
 ﻿
 using Cretan.Contracts;
 using Prism.Mvvm;
+using Prism.Navigation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,7 +11,7 @@ using Xamarin.Forms;
 
 namespace Cretan
 {
-    public class BaseViewModel : BindableBase
+    public class BaseViewModel : BindableBase, INavigationAware
     {
         bool isBusy = false;
         public bool IsBusy
@@ -34,7 +35,19 @@ namespace Cretan
             set { SetProperty(ref title, value); }
         }
 
+        public virtual void OnNavigatedFrom(NavigationParameters parameters)
+        {
+            
+        }
 
+        public virtual void OnNavigatedTo(NavigationParameters parameters)
+        {
+            
+        }
 
+        public virtual void OnNavigatingTo(NavigationParameters parameters)
+        {
+            
+        }
     }
 }

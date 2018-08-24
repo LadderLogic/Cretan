@@ -1,35 +1,35 @@
-﻿using System;
+﻿using Cretan.Contracts;
+using Prism.Commands;
+using Prism.Navigation;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Cretan.Contracts;
-using Cretan.DeviceControl;
-using Prism.Commands;
 using Xamarin.Essentials;
-using Xamarin.Forms;
 
 namespace Cretan.ViewModels
 {
-    public class PaceDefinitionViewModel : BaseViewModel
+    public class FreeRunSetupViewModel:BaseViewModel
     {
         private SessionSetting _session;
 
-        public PaceDefinitionViewModel()
+        public FreeRunSetupViewModel(INavigationService navigationService)
         {
             Debug.WriteLine("ctor viewmodel");
-            Session = new SessionSetting() { TargetPaceInMph = 5, TolerancePercent = 10};
+            Session = new SessionSetting() { TargetPaceInMph = 5, TolerancePercent = 10 };
             Duration = 15; //. default to 15 minutes
             HapticFeedback = true;
             Start = new DelegateCommand(StartSession);
+            _navigationService = navigationService;
         }
 
         private void StartSession()
         {
-            MessagingCenter.Send(this, Messages.StartSession, Session);
-           
-            
+            var navParams = new NavigationParameters();
+            navParams.Add(nameof(SessionSetting), Session);
+            _navigationService.NavigateAsync("GoPage", navParams, true);
+
+
         }
 
         private double _duration;
@@ -39,7 +39,8 @@ namespace Cretan.ViewModels
         public double Duration
         {
             get { return _duration; }
-            set {
+            set
+            {
                 SetProperty(ref _duration, value);
                 Session.Duration = TimeSpan.FromMinutes(value);
             }
@@ -54,14 +55,10 @@ namespace Cretan.ViewModels
             set { SetProperty(ref _session, value); }
         }
         #endregion Session
-        public Location CurrentLocation
-        {
-            get { return _currentLocation; }
-            set { SetProperty(ref _currentLocation, value); }
-        }
-        
 
         public DelegateCommand Start { get; set; }
+
+        private INavigationService _navigationService;
 
 
 
@@ -70,7 +67,8 @@ namespace Cretan.ViewModels
         public bool HapticFeedback
         {
             get { return _hapticFeedback; }
-            set {
+            set
+            {
                 Debug.WriteLine("Haptic Feedback");
 
                 SetProperty(ref _hapticFeedback, value);
@@ -115,7 +113,6 @@ namespace Cretan.ViewModels
             }
         }
         #endregion MediaVolumeFeedback
-
 
     }
 }
