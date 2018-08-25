@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1280px"
+   height="1920px"
+   viewBox="0 0 1280 1920"
+   version="1.1"
+   id="SVGRoot"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="SplashScreen.svg"
+   inkscape:export-filename="C:\Workspaces\xam\Cretan\Cretan.Drawings\splashscreen.png"
+   inkscape:export-xdpi="128.02499"
+   inkscape:export-ydpi="128.02499">
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.4"
+     inkscape:cx="620"
+     inkscape:cy="960"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <defs
+     id="defs1366" />
+  <metadata
+     id="metadata1369">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <g
+       inkscape:label="Layer 1"
+       id="layer1-4"
+       transform="matrix(8,0,0,8,385,706)">
+      <ellipse
+         style="fill:#008080"
+         ry="31"
+         rx="31.625"
+         cy="31.75"
+         cx="31.875"
+         id="path26" />
+      <path
+         transform="matrix(0.66152912,0,0,0.62949789,20.989028,29.705991)"
+         d="m 21.5,9.5 c -2.018071,0.701937 -1.941842,-2.3740086 -1.166666,-3.3541669 2.100681,-2.6561687 6.143893,-1.2901725 7.875,1.0208356 C 31.304878,11.30052 29.10538,17.080127 24.999997,19.562501 18.975183,23.205484 11.256818,20.079722 8.0833322,14.166663 3.8535751,6.2854841 7.9387699,-3.4287727 15.666672,-7.2708347 25.391447,-12.105678 37.125392,-7.0467484 41.625002,2.500006 47.074631,14.062405 41.034645,27.828282 29.66666,32.979169 16.269882,39.04931 0.46491053,32.024044 -5.3333355,18.833325 -12.02764,3.6041184 -4.0144448,-14.244512 11.000009,-20.687502 c 17.060377,-7.320935 36.95576,1.681958 44.04166,18.5208453 C 62.990979,16.72403 52.997147,38.668361 34.333322,46.395836 13.612939,54.974798 -10.381957,43.989127 -18.750003,23.499988"
+         sodipodi:t0="0"
+         sodipodi:argument="-16.0427"
+         sodipodi:radius="42.615284"
+         sodipodi:revolution="3"
+         sodipodi:expansion="1"
+         sodipodi:cy="9.5"
+         sodipodi:cx="21.5"
+         id="path38"
+         style="fill:#decd87;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:0, 11;stroke-dashoffset:0"
+         sodipodi:type="spiral" />
+    </g>
+  </g>
+</svg>

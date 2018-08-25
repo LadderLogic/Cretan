@@ -15,7 +15,7 @@ namespace Cretan.DeviceControl
 
         }
 
-        public async void Pulse(int onDuty, int offDuty, TimeSpan totalDuration, CancellationToken token)
+        public async Task Pulse(int onDuty, int offDuty, TimeSpan totalDuration, CancellationToken token)
         {
             await Task.Factory.StartNew(() =>
             {

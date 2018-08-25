@@ -1,12 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Cretan.Views.SessionSummary">
+             x:Class="Cretan.Views.SessionSummary"
+              xmlns:local="clr-namespace:Cretan.Views"
+ >
+    <ContentPage.Resources>
+        <local:DoubleConverter x:Key="dblConverter" x:Name="dblConverter"/>
+    </ContentPage.Resources>
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <Grid Margin="2,10,2,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label HorizontalOptions="Center" Text="Target Pace"/>
+            <Label Text="{Binding Progress.TargetSession.TargetPaceInMph}" Grid.Row ="1" />
+            <Label HorizontalOptions="Center" Text="Overall Rating" Grid.Row="2"/>
+            <Label Text="{Binding Rating}" Grid.Row ="3" />
+
+            <!--<ListView Grid.Row="4" ItemsSource="{Binding Results}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="{Binding Percentage}"/>
+                            <Label Text="{Binding MinutesInPace}" />
+                            <Label Text="{Binding Score}"/>
+                        </StackLayout>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>-->
+            <Button Grid.Row="5" Text="OK" HorizontalOptions="End" Command="{Binding Accept}"/>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

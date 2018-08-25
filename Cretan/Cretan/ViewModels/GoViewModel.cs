@@ -1,6 +1,7 @@
 ﻿using Cretan.Contracts;
 using Cretan.DeviceControl;
 using Cretan.Services;
+using Cretan.Views;
 using Prism.Commands;
 using Prism.Navigation;
 using System;
@@ -17,11 +18,11 @@ namespace Cretan.ViewModels
     {
 
 
-        public GoPageViewModel(IPaceKeeper paceKeeper)
+        public GoPageViewModel(IPaceKeeper paceKeeper, INavigationService navigationService)
         {
           
             Stop = new DelegateCommand(StopSession);
-
+            _navigationService = navigationService;
             _paceKeeper = paceKeeper;
 
            
@@ -55,15 +56,19 @@ namespace Cretan.ViewModels
 
         private void StopSession()
         {
-            _paceKeeper.StopCurrentSession();
+            var sessionResults = _paceKeeper.StopCurrentSession();
+            var navParams = new NavigationParameters();
+            navParams.Add(nameof(SessionProgress), sessionResults);
+
+            // TODO: Take navigation/data flow out of these pages and move it to event aggregator style service
+            // centralize page flows
+            _navigationService.NavigateAsync(nameof(SessionSummary), navParams);
         }
-
-        private SessionProgress _progress = new SessionProgress();
-
 
 
         public DelegateCommand Stop { get; set; }
 
+        private INavigationService _navigationService;
         private IPaceKeeper _paceKeeper;
         private double _currentPace;
 

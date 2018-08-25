@@ -24,6 +24,9 @@ namespace Cretan.Services
         private BehaviorSubject<TimeSpan> _timeLeft = new BehaviorSubject<TimeSpan>(TimeSpan.FromSeconds(0));
 
         private BehaviorSubject<double> _currentPace = new BehaviorSubject<double>(0);
+        private Speech _speech;
+
+        private SessionProgress _sessionProgress;
 
         public IObservable<double> CurrentPace
         {
@@ -45,6 +48,7 @@ namespace Cretan.Services
         {
             _geo = new Geo();
             _haptic = new Haptic();
+            _speech = new Speech();
             _sessionWatch = new Stopwatch();
         }
 
@@ -52,7 +56,7 @@ namespace Cretan.Services
         public void StartSession(SessionSetting sessionSetting)
         {
             StopCurrentSession();
-
+            _sessionProgress = new SessionProgress(sessionSetting);
             _currentSessionSettings = sessionSetting;
             _geo.StartTrackingLocation();
             _geo.SpeedMph.Subscribe((newSpeed) => UpdateSpeedWithCurrentUnits(newSpeed));
@@ -61,11 +65,13 @@ namespace Cretan.Services
             Task.Factory.StartNew(MonitorSession, mSessionMonitorToken.Token);
         }
 
-        public void StopCurrentSession()
+        public SessionProgress StopCurrentSession()
         {
             _geo.StopTrackingLocation();
             if (!(mSessionMonitorToken?.IsCancellationRequested??true))
                 mSessionMonitorToken?.Cancel();
+
+            return _sessionProgress;
         }
 
         private void MonitorSession()
@@ -77,6 +83,10 @@ namespace Cretan.Services
             {
                 _timeLeft.OnNext(_currentSessionSettings.Duration - _sessionWatch.Elapsed);
                 Task.Delay(1000).Wait();
+
+                // Sample session progress every ~5 seconds
+                if ((int)(_sessionWatch.Elapsed.TotalSeconds % 5)==0)
+                    _sessionProgress.Samples.Add((_sessionWatch.Elapsed, _currentPace.Value));
 
                 if (!IsOnPace())
                 {
@@ -134,21 +144,29 @@ namespace Cretan.Services
                 NotifyHighPace();
         }
 
-        private void NotifyHighPace()
+
+        private async void NotifyHighPace()
         {
             if (_currentSessionSettings.Alerts.HasFlag(AlertType.Haptic))
             {
-                _haptic.Pulse(750, 750, TimeSpan.FromSeconds(3), mSessionMonitorToken.Token);
+                await _haptic.Pulse(750, 750, TimeSpan.FromSeconds(3), mSessionMonitorToken.Token);
+            }
+            if (_currentSessionSettings.Alerts.HasFlag(AlertType.AudioNotification))
+            {
+                await _speech.SpeakText(SpeechStrings.SlowDown);
             }
         }
 
-        private void NotifyLowPace()
+        private async void NotifyLowPace()
         {
             if (_currentSessionSettings.Alerts.HasFlag(AlertType.Haptic))
             {
-                _haptic.Pulse(250, 250, TimeSpan.FromSeconds(2), mSessionMonitorToken.Token);
+                await _haptic.Pulse(250, 250, TimeSpan.FromSeconds(2), mSessionMonitorToken.Token);
             }
-
+            if (_currentSessionSettings.Alerts.HasFlag(AlertType.AudioNotification))
+            {
+                await _speech.SpeakText(SpeechStrings.Faster);
+            }
         }
 
         private bool IsOnPace()

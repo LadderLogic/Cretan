@@ -9,6 +9,6 @@ namespace Cretan.Services
         IObservable<TimeSpan> TimeLeft { get; }
 
         void StartSession(SessionSetting sessionSetting);
-        void StopCurrentSession();
+        SessionProgress StopCurrentSession();
     }
 }

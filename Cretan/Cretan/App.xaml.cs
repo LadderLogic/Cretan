@@ -20,7 +20,9 @@ namespace Cretan
         {
             InitializeComponent();
 
-            await NavigationService.NavigateAsync("MainNavigation/MainMenu");
+            //await NavigationService.NavigateAsync("MainNavigation/MainMenu");
+            await NavigationService.NavigateAsync("MainMenu");
+
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -28,12 +30,13 @@ namespace Cretan
             containerRegistry.RegisterForNavigation<MainMenu>();
             containerRegistry.RegisterForNavigation<FreeRunSetup>();
             containerRegistry.RegisterForNavigation<GoPage>();
+            containerRegistry.RegisterForNavigation<SessionSummary>();
             containerRegistry.RegisterForNavigation<CretanPath>();
 
             // register services. move them to different module?
             containerRegistry.RegisterSingleton<IPaceKeeper, PaceKeeper>();
 
-            containerRegistry.RegisterForNavigation<MainNavigation>();
+            //containerRegistry.RegisterForNavigation<MainNavigation>();
         }
     }
 }
