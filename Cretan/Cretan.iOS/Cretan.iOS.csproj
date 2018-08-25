@@ -27,6 +27,8 @@
     <MtouchArch>x86_64</MtouchArch>
     <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignProvision />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -158,5 +160,10 @@
       <Project>{3700EE62-D56C-47EF-A90D-9C874DF8E989}</Project>
       <Name>Cretan</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="..\..\Cretan.Drawings\circle.png">
+      <Link>Resources\circle.png</Link>
+    </BundleResource>
   </ItemGroup>
 </Project>

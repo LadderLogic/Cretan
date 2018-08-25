@@ -3,32 +3,40 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Cretan.Views.GoPage">
     <ContentPage.Content>
-        <Grid VerticalOptions="FillAndExpand" Padding="20">
+        <Grid VerticalOptions="FillAndExpand" Padding="20" HorizontalOptions="FillAndExpand">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <StackLayout Orientation="Vertical" HorizontalOptions="CenterAndExpand" Grid.Row="0">
-                <Label Text="Pace" Style="{DynamicResource TitleStyle}" />
-                <Button BorderRadius="30" MinimumHeightRequest="60" MinimumWidthRequest="60" BackgroundColor="Turquoise" 
-                        Text="{Binding CurrentPace, StringFormat='{}{0:#,#0.0}'}"
-                        FontSize="Large" TextColor="Black"
-                        Command="{Binding Stop}" />
+            <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Grid.Row="0">
+                <Label Text="Pace" HorizontalOptions="Center" Font="Bold, 30" />
+                <Grid>
+                    <Image Source="circle.png" HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Label Text="{Binding CurrentPace, StringFormat='{}{0:#,#0.0}'}" Font="Bold, 36"  HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                           />
+                </Grid>
+                
             </StackLayout>
             <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Grid.Row="1">
                 <Label Text="Target" Style="{DynamicResource SubtitleStyle}"/>
                     <Label Text="{Binding TargetPace}"/>
+                
                 </StackLayout>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Grid.Row="2">
+            <Button BorderRadius="30" Font="Bold, 24"
+                        Text="Stop" Grid.Row="2"
+                        
+                        Command="{Binding Stop}" />
+            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Grid.Row="3">
                 <Label Text="Time Left" Style="{DynamicResource SubtitleStyle}"/>
                     <Label Text="{Binding TimeLeft, StringFormat='{}{0:hh\\:mm\\:ss}'}"/>
             </StackLayout>
-            <ProgressBar Progress="{Binding ProgressLeft}" Grid.Row="3"  />
+            <ProgressBar Progress="{Binding ProgressLeft}" Grid.Row="4"  />
 
-            <StackLayout Orientation="Horizontal" Grid.Row="4">
+            <StackLayout Orientation="Horizontal" Grid.Row="5">
                 <Label Text="{Binding DebugString}"/>
             </StackLayout>
         </Grid>
