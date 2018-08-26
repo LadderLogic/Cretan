@@ -20,7 +20,7 @@ namespace Cretan.Services
         private CancellationTokenSource mSessionMonitorToken;
         private Haptic _haptic;
         private int _paceTrackingInSeconds = 30;
-        private SessionSetting _currentSessionSettings;
+        private SegmentSetting _currentSessionSettings;
 
         private BehaviorSubject<TimeSpan> _timeLeft = new BehaviorSubject<TimeSpan>(TimeSpan.FromSeconds(0));
 
@@ -54,7 +54,7 @@ namespace Cretan.Services
         }
 
 
-        public void StartSession(SessionSetting sessionSetting)
+        public void StartSession(SegmentSetting sessionSetting)
         {
             StopCurrentSession();
             _sessionProgress = new SessionProgress(sessionSetting);

@@ -129,5 +129,8 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\splashscreennonine.png" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\splashbackground.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

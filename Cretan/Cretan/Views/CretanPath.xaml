@@ -3,14 +3,27 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Cretan.Views.CretanPath">
     <ContentPage.Content>
-        <ListView ItemsSource="{Binding Levels}">
-            <ListView.HeaderTemplate>
+        <ListView ItemsSource="{Binding SelectedPack.Programs}" x:Name="_packView">
+            <!--<ListView.HeaderTemplate>
                 <DataTemplate>
-                    <StackLayout>
-                        
+                    <StackLayout HeightRequest="50">
+                        <Label Text="{Binding Path=SelectedItem.Name, Source={x:Reference _packView}}"/>
                     </StackLayout>
                 </DataTemplate>
-            </ListView.HeaderTemplate>
+            </ListView.HeaderTemplate>-->
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Frame BorderColor="{DynamicResource mainColor}" CornerRadius="0">
+                            <StackLayout>
+                                <Label Text="{Binding Name}" Font="16"/>
+                                <Label Text="{Binding Description}" Font="12"/>
+                            </StackLayout>
+                        </Frame>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>    
         </ListView>
+        
     </ContentPage.Content>
 </ContentPage>

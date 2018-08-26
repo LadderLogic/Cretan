@@ -9,9 +9,9 @@ namespace Cretan.ViewModels
 {
     public class SessionViewModel : BaseViewModel
     {
-        private SessionSetting _sessionSettings;
+        private SegmentSetting _sessionSettings;
 
-        public SessionViewModel(SessionSetting settings)
+        public SessionViewModel(SegmentSetting settings)
         {
             SessionSettings = settings;
 
@@ -29,7 +29,7 @@ namespace Cretan.ViewModels
 
 
 
-        public SessionSetting SessionSettings
+        public SegmentSetting SessionSettings
         {
             get
             {

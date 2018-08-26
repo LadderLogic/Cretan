@@ -14,7 +14,7 @@ namespace Cretan.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class Session : ContentPage
 	{
-		public Session (SessionSetting settings)
+		public Session (SegmentSetting settings)
 		{
 			InitializeComponent ();
             BindingContext = new SessionViewModel(settings);

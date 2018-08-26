@@ -11,12 +11,12 @@ namespace Cretan.ViewModels
 {
     public class FreeRunSetupViewModel:BaseViewModel
     {
-        private SessionSetting _session;
+        private SegmentSetting _session;
 
         public FreeRunSetupViewModel(INavigationService navigationService)
         {
             Debug.WriteLine("ctor viewmodel");
-            Session = new SessionSetting() { TargetPaceInMph = 5, TolerancePercent = 10 };
+            Session = new SegmentSetting() { TargetPaceInMph = 5, TolerancePercent = 10 };
             Duration = 15; //. default to 15 minutes
             HapticFeedback = true;
             Start = new DelegateCommand(StartSession);
@@ -26,7 +26,7 @@ namespace Cretan.ViewModels
         private void StartSession()
         {
             var navParams = new NavigationParameters();
-            navParams.Add(nameof(SessionSetting), Session);
+            navParams.Add(nameof(SegmentSetting), Session);
             _navigationService.NavigateAsync("GoPage", navParams, true);
 
 
@@ -49,7 +49,7 @@ namespace Cretan.ViewModels
 
 
         #region Session		
-        public SessionSetting Session
+        public SegmentSetting Session
         {
             get { return _session; }
             set { SetProperty(ref _session, value); }

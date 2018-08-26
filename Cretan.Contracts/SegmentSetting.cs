@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Cretan.Contracts
 {
-    public class SessionSetting
+    public class SegmentSetting
     {
         /// <summary>
         /// Gets or sets the target pace in MPH.
