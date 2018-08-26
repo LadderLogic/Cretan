@@ -12,6 +12,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
+
             <Button HorizontalOptions="FillAndExpand" Command="{Binding Navigation}" 
                     CommandParameter="FreeRunSetup"  Text="Free Run"  Font="Bold, 28"  HeightRequest="70" Grid.Row="1" />
             <Button HorizontalOptions="FillAndExpand" Command="{Binding Navigation}" 

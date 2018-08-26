@@ -1,5 +1,6 @@
 ﻿using Cretan.Contracts;
 using Cretan.DeviceControl;
+using Cretan.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,7 +14,7 @@ namespace Cretan.Services
 {
     public class PaceKeeper : IPaceKeeper
     {
-        private Geo _geo;
+        private IGeo _geo;
         private Stopwatch _sessionWatch;
 
         private CancellationTokenSource mSessionMonitorToken;
@@ -44,9 +45,9 @@ namespace Cretan.Services
             }
         }
 
-        public PaceKeeper()
+        public PaceKeeper(IGeo geo)
         {
-            _geo = new Geo();
+            _geo = geo;
             _haptic = new Haptic();
             _speech = new Speech();
             _sessionWatch = new Stopwatch();

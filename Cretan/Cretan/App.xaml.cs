@@ -1,3 +1,4 @@
+using Cretan.Interfaces;
 using Cretan.Services;
 using Cretan.Views;
 using Prism;
@@ -33,10 +34,16 @@ namespace Cretan
             containerRegistry.RegisterForNavigation<SessionSummary>();
             containerRegistry.RegisterForNavigation<CretanPath>();
 
+
+            containerRegistry.RegisterSingleton<IGeo, DeviceControl.Geo>();
+            // Simulator for Geo
+            //containerRegistry.RegisterSingleton<IGeo, Simulators.GeoSimulator>();
+
             // register services. move them to different module?
             containerRegistry.RegisterSingleton<IPaceKeeper, PaceKeeper>();
 
             //containerRegistry.RegisterForNavigation<MainNavigation>();
+            containerRegistry.RegisterForNavigation<Help>();
         }
     }
 }

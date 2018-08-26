@@ -15,9 +15,18 @@
             <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Grid.Row="0">
                 <Label Text="Pace" HorizontalOptions="Center" Font="Bold, 30" />
                 <Grid>
-                    <Image Source="circle.png" HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Source="circle.png" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1" />
                     <Label Text="{Binding CurrentPace, StringFormat='{}{0:#,#0.0}'}" Font="Bold, 36"  HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
-                           />
+                              Grid.Column="1" />
+
+                    <Label Text="{Binding CurrentPace, StringFormat='{}{0:#,#0.0} mpm'}" RotationX="15" Rotation="-45" Font="16" Grid.Column="2" HorizontalOptions="Start" HorizontalTextAlignment="Start">
+                        
+                    </Label>
                 </Grid>
                 
             </StackLayout>

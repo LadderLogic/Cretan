@@ -24,5 +24,17 @@ namespace Cretan.DeviceControl
             return kmpH;
         }
 
+        public static double MphToMinutesPerMile(double mph)
+        {
+            var minutesPerMile = 60.0/mph;
+            return minutesPerMile;
+        }
+
+        public static double MinutesPerMileToMph(double minutesPerMile)
+        {
+            var mph = 60.0 / minutesPerMile ;
+            return mph;
+        }
+
     }
 }

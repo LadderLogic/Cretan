@@ -16,6 +16,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Cretan.Contracts\Cretan.Contracts.csproj" />
     <ProjectReference Include="..\..\Cretan.DeviceControl\Cretan.DeviceControl.csproj" />
+    <ProjectReference Include="..\..\Cretan.Interfaces\Cretan.Interfaces.csproj" />
+    <ProjectReference Include="..\..\Cretan.Simulators\Cretan.Simulators.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +28,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\GoPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Help.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\LevelSummary.xaml">

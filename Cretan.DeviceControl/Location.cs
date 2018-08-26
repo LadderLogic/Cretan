@@ -5,14 +5,16 @@ using System.Threading.Tasks;
 using System.Reactive.Linq;
 using System.Diagnostics;
 using System.Threading;
+using Cretan.Interfaces;
+using System.Linq;
 
 namespace Cretan.DeviceControl
 {
-    public class Geo
+    public class Geo : IGeo
     {
-        private BehaviorSubject<Location> _currentLocation;
+        private BehaviorSubject<(double Latitude, double Longitude)> _currentLocation;
 
-        public IObservable<Location> CurrentLocation {
+        public IObservable<(double Latitude, double Longitude)> CurrentLocation {
             get { return _currentLocation.AsObservable();
             } }
 
@@ -26,7 +28,7 @@ namespace Cretan.DeviceControl
             }
         }
 
-        public Location GetCurrentLocation()
+        public (double Latitude, double Longitude) GetCurrentLocation()
         {
             return _currentLocation.Value;
         }
@@ -36,7 +38,7 @@ namespace Cretan.DeviceControl
 
         public Geo()
         {
-            _currentLocation = new BehaviorSubject<Location>(new Location(39.5595198, -120.82769659999997));
+            _currentLocation = new BehaviorSubject<(double Longitude, double Latitude)>((39.5595198, -120.82769659999997));
             _speedMph = new BehaviorSubject<double>(0.0);
             _waitForMotion = new ManualResetEventSlim(false);
             Accelerometer.ReadingChanged += Accelerometer_ReadingChanged;
@@ -58,7 +60,8 @@ namespace Cretan.DeviceControl
 
             Task.Factory.StartNew(() =>
             {
-                _currentLocation.OnNext(Geolocation.GetLastKnownLocationAsync().Result);
+                var firstLocation = Geolocation.GetLastKnownLocationAsync().Result;
+                _currentLocation.OnNext((firstLocation.Latitude, firstLocation.Longitude));
 
                 while (true)
                 {
@@ -71,7 +74,7 @@ namespace Cretan.DeviceControl
 
                     var oldLocation = _currentLocation.Value;
                     var newLocation = Geolocation.GetLocationAsync(new GeolocationRequest(GeolocationAccuracy.Best)).Result;
-                    if (newLocation.Accuracy.Value > 20)
+                    if (newLocation.Accuracy.Value > 10)
                         continue;
                     UpdateLocationAndSpeed(oldLocation, newLocation);
                     _waitForMotion.Reset();
@@ -87,9 +90,10 @@ namespace Cretan.DeviceControl
                 _trackingToken.Cancel();
         }
 
-        private void UpdateLocationAndSpeed(Location oldLocation, Location value)
+        private void UpdateLocationAndSpeed((double Latitude, double Longitude) oldLocation, Location value)
         {
-            _currentLocation.OnNext(value);
+            
+            _currentLocation.OnNext((value.Latitude, value.Longitude));
            
             var speedMps = value.Speed;
             if (!speedMps.HasValue || speedMps.Value <= 0)

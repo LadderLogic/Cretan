@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CarouselPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="Cretan.Views.Help">
+    <ContentPage Title="Help" BackgroundColor="{DynamicResource Key=mainColor}">
+        <StackLayout VerticalOptions="Center">
+            <Label>
+                <Label.Text>
+                    Any fools can run fast for a minute when chased by a bear, but can you maintain a pace like a Cretan. Be a Cretan, become a Running God
+                </Label.Text>
+            </Label>
+        </StackLayout>
+    </ContentPage>
+    <ContentPage Title="Help - Cretan Mode"  BackgroundColor="{DynamicResource Key=mainColor}">
+        <StackLayout VerticalOptions="Center">
+            <Label>
+                <Label.Text>
+                    Pre programmed sessions. Levels unlock as progress is made.
+                </Label.Text>
+            </Label>
+        </StackLayout>
+    </ContentPage>
+    <ContentPage Title="Help Free Run"  BackgroundColor="{DynamicResource Key=mainColor}">
+        <StackLayout VerticalOptions="Center">
+            <Label>
+                <Label.Text>
+                    Set a pace, go run. You need a cookie?
+                </Label.Text>
+            </Label>
+        </StackLayout>
+    </ContentPage>
+
+</CarouselPage>
