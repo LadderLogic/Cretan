@@ -7,6 +7,8 @@
         <ResourceDictionary>
             <Color x:Key="backgroundColor">Black</Color>
             <Color x:Key="textColor">White</Color>
+            <!--<Color x:Key="mainColor">#43C6DB</Color>
+            <Color x:Key="accentColor">Black</Color>-->
             <Color x:Key="mainColor">#008080</Color>
             <Color x:Key="accentColor">#d3bc5f</Color>
 

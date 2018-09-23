@@ -35,7 +35,7 @@
                     <Label Text="{Binding TargetPace}"/>
                 
                 </StackLayout>
-            <Button BorderRadius="30" Font="Bold, 24"
+            <Button BorderRadius="0" Font="Bold, 24"
                         Text="Stop" Grid.Row="2"
                         
                         Command="{Binding Stop}" />

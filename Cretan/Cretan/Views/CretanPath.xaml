@@ -3,27 +3,36 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Cretan.Views.CretanPath">
     <ContentPage.Content>
-        <ListView ItemsSource="{Binding SelectedPack.Programs}" x:Name="_packView">
-            <!--<ListView.HeaderTemplate>
-                <DataTemplate>
-                    <StackLayout HeightRequest="50">
-                        <Label Text="{Binding Path=SelectedItem.Name, Source={x:Reference _packView}}"/>
-                    </StackLayout>
-                </DataTemplate>
-            </ListView.HeaderTemplate>-->
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <Frame BorderColor="{DynamicResource mainColor}" CornerRadius="0">
-                            <StackLayout>
-                                <Label Text="{Binding Name}" Font="16"/>
-                                <Label Text="{Binding Description}" Font="12"/>
-                            </StackLayout>
-                        </Frame>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>    
-        </ListView>
-        
+        <Grid Padding="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackLayout>
+                <StackLayout HeightRequest="50" BindingContext="{x:Reference _packView}" >
+                    <Label Text="{Binding Path=SelectedItem.Name}"/>
+                    <Label Text="{Binding Path=SelectedItem.Description}"/>
+                </StackLayout>
+                <Button Command="{Binding Start}" Text="Start" HorizontalOptions="End" />
+            </StackLayout>
+
+            <ListView Grid.Row="1" ItemsSource="{Binding SelectedPack.Programs}" 
+                      SelectedItem="{Binding SelectedProgram}" HasUnevenRows="True" x:Name="_packView">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Frame BorderColor="{DynamicResource mainColor}" BackgroundColor="{DynamicResource backgroundColor}" CornerRadius="0">
+                                
+                                <StackLayout>
+                                    <Label Text="{Binding Name}" />
+                                    <Label Text="{Binding Description}" />
+                                </StackLayout>
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+
     </ContentPage.Content>
 </ContentPage>

@@ -38,6 +38,11 @@ namespace Cretan.ViewModels
             // Read session settings passed in by navigation
             _currentSessionSettings = parameters.GetValue<SegmentSetting>(nameof(SegmentSetting));
 
+            if (_currentSessionSettings == null)
+            {
+                _currentSessionSettings = parameters.GetValue<ProgramSetting>(nameof(ProgramSetting)).Segments.First.Value;
+            }
+
             TargetPace = _currentSessionSettings.TargetPaceInMph;
 
 
