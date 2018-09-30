@@ -5,15 +5,14 @@
     <ContentPage.Content>
         <Grid VerticalOptions="FillAndExpand" Padding="20" HorizontalOptions="FillAndExpand">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Grid.Row="0">
-                <Label Text="Pace" HorizontalOptions="Center" Font="Bold, 30" />
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -28,22 +27,46 @@
                         
                     </Label>
                 </Grid>
-                
             </StackLayout>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Grid.Row="1">
-                <Label Text="Target" Style="{DynamicResource SubtitleStyle}"/>
-                    <Label Text="{Binding TargetPace}"/>
-                
+            <StackLayout Grid.Row="1" HorizontalOptions="FillAndExpand">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                    <Label Text="Current Segment" HorizontalOptions="Start"  Style="{DynamicResource SubtitleStyle}"/>
+                    <Label Text="{Binding TargetPace}" HorizontalOptions="EndAndExpand" />
                 </StackLayout>
+                <ProgressBar Progress="{Binding SegmentProgress}" HorizontalOptions="FillAndExpand" />
+                <Label Text="{Binding SegmentTimeLeft, StringFormat='{}{0:hh\\:mm\\:ss}'}" HorizontalOptions="EndAndExpand" />
+            </StackLayout>
+            <StackLayout Grid.Row="2"  HorizontalOptions="FillAndExpand">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                    <Label Text="Total" HorizontalOptions="Start"  Style="{DynamicResource SubtitleStyle}"/>
+                </StackLayout>
+                <ProgressBar Progress="{Binding Progress}" />
+                <Label Text="{Binding ProgramTimeLeft, StringFormat='{}{0:hh\\:mm\\:ss}'}"  HorizontalOptions="EndAndExpand" />
+            </StackLayout>
+            <StackLayout Grid.Row="3"  HorizontalOptions="CenterAndExpand">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                    <Label Text="Up Next" HorizontalOptions="Start"  Style="{DynamicResource SubtitleStyle}"/>
+                    
+                </StackLayout>
+                <ListView ItemsSource="{Binding UpNextSegments}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                                <Label Text="{Binding Duration}"/>
+                                <Label Text=" @ "/>
+                                <Label Text="{Binding TargetPaceInMph}"/>
+                            </StackLayout>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+
+           
             <Button BorderRadius="0" Font="Bold, 24"
-                        Text="Stop" Grid.Row="2"
+                        Text="Stop" Grid.Row="4"
                         
                         Command="{Binding Stop}" />
-            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Grid.Row="3">
-                <Label Text="Time Left" Style="{DynamicResource SubtitleStyle}"/>
-                    <Label Text="{Binding TimeLeft, StringFormat='{}{0:hh\\:mm\\:ss}'}"/>
-            </StackLayout>
-            <ProgressBar Progress="{Binding ProgressLeft}" Grid.Row="4"  />
+            
 
             <StackLayout Orientation="Horizontal" Grid.Row="5">
                 <Label Text="{Binding DebugString}"/>

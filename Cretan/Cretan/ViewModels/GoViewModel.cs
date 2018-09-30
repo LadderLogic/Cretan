@@ -36,34 +36,61 @@ namespace Cretan.ViewModels
             base.OnNavigatingTo(parameters);
 
             // Read session settings passed in by navigation
-            _currentSessionSettings = parameters.GetValue<SegmentSetting>(nameof(SegmentSetting));
+            
+            _currentProgramSetting = parameters.GetValue<ProgramSetting>(nameof(ProgramSetting));
 
-            if (_currentSessionSettings == null)
+            
+
+
+            _paceKeeper.StartProgram(_currentProgramSetting);
+            _paceKeeper.CurrentSegment.Subscribe((segmentNode) =>
             {
-                _currentSessionSettings = parameters.GetValue<ProgramSetting>(nameof(ProgramSetting)).Segments.First.Value;
-            }
-
-            TargetPace = _currentSessionSettings.TargetPaceInMph;
-
-
-            _paceKeeper.StartSession(_currentSessionSettings);
+                if ((segmentNode == null) || (segmentNode.Value == null))
+                    return;
+                
+                TargetPace = segmentNode.Value.TargetPaceInMph;
+                CurrentSegment = segmentNode.Value;
+            });
 
             _paceKeeper.CurrentPace.Subscribe(pace => CurrentPace = pace);
+
+            _paceKeeper.CurrentSegmentTimeLeft.Subscribe(segTimeLeft =>
+            {
+                if (CurrentSegment == null)
+                    return;
+                SegmentTimeLeft = segTimeLeft;
+                SegmentProgress = (CurrentSegment.Duration.TotalSeconds - segTimeLeft.TotalSeconds) / CurrentSegment.Duration.TotalSeconds;
+
+            });
+
             _paceKeeper.TimeLeft.Subscribe(timeLeft =>
             {
-                TimeLeft = timeLeft;
-                ProgressLeft = (_currentSessionSettings.Duration.TotalSeconds - timeLeft.TotalSeconds) / _currentSessionSettings.Duration.TotalSeconds;
+                ProgramTimeLeft = timeLeft;
+                var totalTime = _currentProgramSetting.GetTotalTime();
+                Progress = (totalTime - timeLeft).TotalSeconds / totalTime.TotalSeconds;
             });
         }
 
+        private double _progress;
+        public double Progress
+        {
+            get { return _progress; }
+            set { SetProperty(ref _progress, value); }
+        }
 
+        private SegmentSetting _currentSegment;
+        public SegmentSetting CurrentSegment
+        {
+            get { return _currentSegment; }
+            set { SetProperty(ref _currentSegment, value); }
+        }
 
 
         private void StopSession()
         {
             var sessionResults = _paceKeeper.StopCurrentSession();
             var navParams = new NavigationParameters();
-            navParams.Add(nameof(SessionProgress), sessionResults);
+            navParams.Add(nameof(ProgramProgress), sessionResults);
 
             // TODO: Take navigation/data flow out of these pages and move it to event aggregator style service
             // centralize page flows
@@ -84,7 +111,7 @@ namespace Cretan.ViewModels
         }
 
         private double _targetPace;
-        private SegmentSetting _currentSessionSettings;
+        private ProgramSetting _currentProgramSetting;
 
         public double TargetPace
         {
@@ -100,23 +127,28 @@ namespace Cretan.ViewModels
             set { SetProperty(ref _currentSpeed, value); }
         }
 
-        private double _progressLeft = 0;
-        public double ProgressLeft
+        private double _segmentProgress = 0;
+        public double SegmentProgress
         {
-            get { return _progressLeft; }
-            set { SetProperty(ref _progressLeft, value); }
+            get { return _segmentProgress; }
+            set { SetProperty(ref _segmentProgress, value); }
         }
 
 
         private TimeSpan _timeLeft;
 
 
-        public TimeSpan TimeLeft
+        public TimeSpan ProgramTimeLeft
         {
             get { return _timeLeft; }
             set { SetProperty(ref _timeLeft, value); }
         }
 
-
+        private TimeSpan _segmentTimeLeft;
+        public TimeSpan SegmentTimeLeft
+        {
+            get { return _segmentTimeLeft; }
+            set { SetProperty(ref _segmentTimeLeft, value); }
+        }
     }
 }

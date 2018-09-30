@@ -54,5 +54,31 @@ namespace Cretan.Contracts
         /// The warm up time.
         /// </value>
         public TimeSpan WarmUpTime { get; set; }
+
+
+        public TimeSpan GetTotalTime()
+        {
+            var retVal = TimeSpan.FromSeconds(0);
+            foreach(var segment in Segments)
+            {
+                retVal = retVal.Add(segment.Duration);
+            }
+
+            return retVal;
+        }
+
+        public TimeSpan GetTimePassedBeforeSegment(LinkedListNode<SegmentSetting> node)
+        {
+            var retVal = TimeSpan.FromSeconds(0);
+
+            while (node.Previous != null)
+            {
+                retVal = retVal.Add(node.Previous.Value.Duration);
+                node = node.Previous;
+            }
+
+            return retVal;
+        }
+
     }
 }

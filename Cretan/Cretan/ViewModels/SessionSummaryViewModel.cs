@@ -58,7 +58,7 @@ namespace Cretan.ViewModels
             base.OnNavigatingTo(parameters);
 
             // Read session progress in by navigation
-            Progress = parameters.GetValue<SessionProgress>(nameof(SessionProgress));
+            Progress = parameters.GetValue<ProgramProgress>(nameof(ProgramProgress)).SessionProgress.FirstOrDefault();
 
             CalculateResults(Progress);
         }

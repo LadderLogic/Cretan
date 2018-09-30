@@ -5,13 +5,13 @@
              x:Class="Cretan.App">
 	<Application.Resources>
         <ResourceDictionary>
-            <Color x:Key="backgroundColor">Black</Color>
+            <Color x:Key="backgroundColor">#222222</Color>
             <Color x:Key="textColor">White</Color>
             <!--<Color x:Key="mainColor">#43C6DB</Color>
             <Color x:Key="accentColor">Black</Color>-->
             <Color x:Key="mainColor">#008080</Color>
-            <Color x:Key="accentColor">#d3bc5f</Color>
-
+            <Color x:Key="accentColor">#88AA00</Color>
+            <Color x:Key="controlBackground">#333333</Color>
             <Style TargetType="Label">
                 <Setter Property="TextColor" Value="{DynamicResource accentColor}" />
                 <Setter Property="VerticalTextAlignment" Value="Center" />
@@ -21,8 +21,10 @@
 
             </Style>
             <Style TargetType="Button">
-                <Setter Property="BackgroundColor" Value="{DynamicResource mainColor}"/>
+                <Setter Property="BackgroundColor" Value="{DynamicResource controlBackground}"/>
                 <Setter Property="TextColor" Value="{DynamicResource accentColor}"/>
+                <Setter Property="BorderColor" Value="{DynamicResource mainColor}"/>
+                <Setter Property="BorderWidth" Value="1"/>
             </Style>
             <Style TargetType="ContentPage" ApplyToDerivedTypes="True">
                 <Setter Property="BackgroundColor" Value="{StaticResource backgroundColor}" />

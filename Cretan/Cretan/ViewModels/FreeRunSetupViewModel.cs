@@ -26,7 +26,9 @@ namespace Cretan.ViewModels
         private void StartSession()
         {
             var navParams = new NavigationParameters();
-            navParams.Add(nameof(SegmentSetting), Session);
+            var newProgram = new ProgramSetting("Quick run", "Quick Run");
+            newProgram.Segments.AddFirst(Session);
+            navParams.Add(nameof(ProgramSetting), newProgram);
             _navigationService.NavigateAsync("GoPage", navParams, true);
 
 

@@ -20,14 +20,14 @@ namespace Cretan.Services
         private CancellationTokenSource mSessionMonitorToken;
         private Haptic _haptic;
         private int _paceTrackingInSeconds = 30;
+        private ProgramSetting _currentProgramSettings;
         private SegmentSetting _currentSessionSettings;
 
-        private BehaviorSubject<TimeSpan> _timeLeft = new BehaviorSubject<TimeSpan>(TimeSpan.FromSeconds(0));
 
         private BehaviorSubject<double> _currentPace = new BehaviorSubject<double>(0);
         private Speech _speech;
 
-        private SessionProgress _sessionProgress;
+        private ProgramProgress _programProgress;
 
         public IObservable<double> CurrentPace
         {
@@ -37,6 +37,20 @@ namespace Cretan.Services
             }
         }
 
+        private BehaviorSubject<TimeSpan> _currentSegmentTimeLeft = new BehaviorSubject<TimeSpan>(TimeSpan.FromSeconds(0));
+
+        public IObservable<TimeSpan> CurrentSegmentTimeLeft
+        {
+            get
+            {
+                return _currentSegmentTimeLeft.AsObservable();
+            }
+        }
+
+        private BehaviorSubject<TimeSpan> _timeLeft = new BehaviorSubject<TimeSpan>(TimeSpan.FromSeconds(0));
+
+        private SessionProgress _currentSegmentProgress;
+
         public IObservable<TimeSpan> TimeLeft
         {
             get
@@ -44,6 +58,10 @@ namespace Cretan.Services
                 return _timeLeft.AsObservable();
             }
         }
+
+
+        private BehaviorSubject<LinkedListNode<SegmentSetting>> _currentSegmentNode = new BehaviorSubject<LinkedListNode<SegmentSetting>>(null);
+        public IObservable<LinkedListNode<SegmentSetting>> CurrentSegment => _currentSegmentNode.AsObservable();
 
         public PaceKeeper(IGeo geo)
         {
@@ -54,40 +72,70 @@ namespace Cretan.Services
         }
 
 
-        public void StartSession(SegmentSetting sessionSetting)
+        public void StartProgram(ProgramSetting programSetting)
         {
             StopCurrentSession();
-            _sessionProgress = new SessionProgress(sessionSetting);
-            _currentSessionSettings = sessionSetting;
+            _programProgress = new ProgramProgress(programSetting);
+            _currentProgramSettings = programSetting;
             _geo.StartTrackingLocation();
             _geo.SpeedMph.Subscribe((newSpeed) => UpdateSpeedWithCurrentUnits(newSpeed));
 
             mSessionMonitorToken = new CancellationTokenSource();
-            Task.Factory.StartNew(MonitorSession, mSessionMonitorToken.Token);
+            Task.Factory.StartNew(MonitorProgram, mSessionMonitorToken.Token);
         }
 
-        public SessionProgress StopCurrentSession()
+        public ProgramProgress StopCurrentSession()
         {
             _geo.StopTrackingLocation();
             if (!(mSessionMonitorToken?.IsCancellationRequested??true))
                 mSessionMonitorToken?.Cancel();
 
-            return _sessionProgress;
+            return _programProgress;
         }
 
-        private void MonitorSession()
+        private void MonitorProgram()
+        {
+            _currentSegmentNode.OnNext(_currentProgramSettings.Segments.First);
+            _currentSessionSettings = _currentSegmentNode.Value?.Value;
+            while (_currentSessionSettings != null)
+            {
+                _currentSegmentProgress = new SessionProgress(_currentSessionSettings);
+                _programProgress.SessionProgress.Add(_currentSegmentProgress);
+
+                // Run the current segment
+                Task.Run(()=>MonitorSegment(), mSessionMonitorToken.Token).Wait();
+
+                // move to next segment
+                _currentSegmentNode.OnNext(_currentSegmentNode.Value.Next);
+                _currentSessionSettings = _currentSegmentNode.Value?.Value;
+            }
+        }
+
+        private TimeSpan ProgramTimeLeft()
+        {
+            var timePassed = _currentProgramSettings.GetTimePassedBeforeSegment(_currentSegmentNode.Value) + _sessionWatch.Elapsed;
+            var timeLeft = _currentProgramSettings.GetTotalTime() - timePassed;
+            return timeLeft;
+        }
+
+        private void MonitorSegment()
         {
             _sessionWatch.Start();
 
             var paceWatch = new Stopwatch();
             while (!mSessionMonitorToken.IsCancellationRequested)
             {
-                _timeLeft.OnNext(_currentSessionSettings.Duration - _sessionWatch.Elapsed);
+                _currentSegmentTimeLeft.OnNext(_currentSessionSettings.Duration - _sessionWatch.Elapsed);
+                _timeLeft.OnNext(ProgramTimeLeft());
+
+                if (_currentSegmentTimeLeft.Value.TotalSeconds <= 0)
+                    break;
+
                 Task.Delay(1000).Wait();
 
                 // Sample session progress every ~5 seconds
                 if ((int)(_sessionWatch.Elapsed.TotalSeconds % 5)==0)
-                    _sessionProgress.Samples.Add((_sessionWatch.Elapsed, _currentPace.Value));
+                    _currentSegmentProgress.Samples.Add((_sessionWatch.Elapsed, _currentPace.Value));
 
                 if (!IsOnPace())
                 {
